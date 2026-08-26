@@ -69,13 +69,7 @@
   --bg-editor:    #fff5f9;
   --bg-tab-act:   #fff5f9;
   --bg-tab-in:    #f7c3d8;
-  --bg-terminal:  #f9edf4;
-  --t-log-color:  #7a4a6a;
-  --t-ok-color:   #1a7a4a;
-  --t-err-color:  #c0184a;
-  --t-pmt-color:  #d63384;
-  --t-cmd-color:  #1e0d17;
-  --t-out-color:  #9060a0;
+  --bg-terminal:  #2d1b25;
   --bg-statusbar: #d63384;
   --bg-panel-hdr: #f2adc9;
   --bg-palette:   #fef0f6;
@@ -541,21 +535,6 @@ body {
 .t-path{ color: var(--blue); }
 .t-out { color: var(--text-muted); }
 
-/* Terminal light-mode overrides */
-[data-theme="light"] .terminal-body,
-[data-theme="light"] .problems-body { color: var(--text-mid); }
-[data-theme="light"] .t-ok   { color: #1a7a4a; }
-[data-theme="light"] .t-err  { color: #c0184a; }
-[data-theme="light"] .t-warn { color: #b45309; }
-[data-theme="light"] .t-pmt  { color: #d63384; }
-[data-theme="light"] .t-cmd  { color: #1e0d17; }
-[data-theme="light"] .t-out  { color: #7a4a6a; }
-[data-theme="light"] .t-path { color: #1d4ed8; }
-[data-theme="light"] .term-prompt-str { color: #d63384; }
-[data-theme="light"] .term-input { color: #1e0d17; }
-[data-theme="light"] .prob-msg { color: #5c2e47; }
-[data-theme="light"] .prob-loc { color: #a06080; }
-
 .term-input-row {
   display: flex; align-items: center; gap: 0; margin-top: auto;
   padding-top: 4px;
@@ -611,28 +590,17 @@ body {
 
 /* Theme toggle */
 .theme-toggle {
-  cursor: none;
-  background: rgba(255,255,255,0.18);
-  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  border: none;
   color: white;
-  font-size: 12px;
-  padding: 3px 10px;
-  border-radius: 20px;
-  line-height: 1.4;
-  transition: all 0.2s;
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  white-space: nowrap;
+  font-size: 13px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  line-height: 1;
+  transition: background 0.15s;
 }
-.theme-toggle:hover {
-  background: rgba(255,255,255,0.3);
-  border-color: rgba(255,255,255,0.5);
-  transform: scale(1.04);
-}
+.theme-toggle:hover { background: rgba(255,255,255,0.2); }
 
 /* ════════════════════════════════════════════════════════
    COMMAND PALETTE
@@ -1335,7 +1303,7 @@ a, button, .tab, .tree-file, .act-icon, .cmd-item, .proj-card,
     <span class="sb-item">Ln 1, Col 1</span>
     <span class="sb-item">UTF-8</span>
     <span class="sb-item">TypeScript</span>
-    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark theme" id="themeBtn">🌙 Dark</button>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark theme" id="themeBtn">☀️</button>
   </div>
 </div>
 
@@ -1412,14 +1380,14 @@ let dark = true;
 function toggleTheme() {
   dark = !dark;
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  document.getElementById('themeBtn').textContent = dark ? '🌙 Dark' : '☀️ Light';
+  document.getElementById('themeBtn').textContent = dark ? '☀️' : '🌙';
   termLog(`<span class="t-ok">✓</span> <span class="t-out">Theme switched to ${dark ? 'Night Pink (dark)' : 'Day Pink (light)'}</span>`);
   try { localStorage.setItem('afaf-theme', dark ? 'dark' : 'light'); } catch(e){}
 }
 // Restore saved theme
 try {
   const saved = localStorage.getItem('afaf-theme');
-  if (saved === 'light') { dark = false; document.documentElement.setAttribute('data-theme','light'); document.getElementById('themeBtn').textContent = '☀️ Light'; }
+  if (saved === 'light') { dark = false; document.documentElement.setAttribute('data-theme','light'); document.getElementById('themeBtn').textContent = '🌙'; }
 } catch(e){}
 
 /* ══════════════════════════════════════════════════════
