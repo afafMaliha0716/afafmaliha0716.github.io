@@ -6,7 +6,7 @@
 
 ---
 
-## ✦ Features
+## Features
 
 - **Night Pink dark theme** — based on the VSCode Night Pink extension, with a full light mode toggle
 - **Command Palette** — `Ctrl+Shift+P` opens a real fuzzy-search file navigator (just like VSCode)
@@ -17,7 +17,7 @@
 - **Hover IntelliSense** — hover over code identifiers for tooltips
 - **Zero dependencies** — pure HTML, CSS, and vanilla JS. No build step, no frameworks
 
-## 📁 Portfolio Sections
+## Portfolio Sections
 
 | File | Contents |
 |------|----------|
@@ -27,7 +27,7 @@
 | `skills.json` | Languages, frameworks, tools, product skills |
 | `contact.ts` | Email, LinkedIn, GitHub, resume |
 
-## 🚀 Deploying to GitHub Pages
+## Deploying to GitHub Pages
 
 This site deploys automatically via GitHub Pages — no CI/CD needed.
 
@@ -38,7 +38,7 @@ This site deploys automatically via GitHub Pages — no CI/CD needed.
 
 **Updating the site:** just push a new commit. GitHub Pages redeploys automatically.
 
-## 🛠 Local development
+## Local development
 
 No build step needed. Just open `index.html` in your browser:
 
@@ -53,7 +53,7 @@ python3 -m http.server 3000
 # Option 3: VS Code Live Server extension → right-click index.html → Open with Live Server
 ```
 
-## 🎨 Customizing
+## Customizing
 
 All content lives in `index.html`. Look for `[bracket]` placeholders:
 
@@ -64,7 +64,7 @@ All content lives in `index.html`. Look for `[bracket]` placeholders:
 - **Status bar messages** → search `STATUSES` array near the bottom of the `<script>` tag
 - **Terminal easter eggs** → search `RESPONSES` object to add your own commands
 
-## 📸 Preview
+## Preview
 
 ![Portfolio Preview](preview.png)
 <!-- Take a screenshot and save it as preview.png in this folder -->
