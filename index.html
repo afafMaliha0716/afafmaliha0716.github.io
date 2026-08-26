@@ -690,6 +690,202 @@ body {
 .tooltip .tt-desc { color: var(--text-mid); font-size: 11.5px; }
 
 /* ════════════════════════════════════════════════════════
+   RESIZE HANDLES
+   ════════════════════════════════════════════════════════ */
+.resize-handle-x {
+  width: 4px;
+  cursor: col-resize;
+  background: transparent;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  z-index: 20;
+  position: relative;
+}
+.resize-handle-x:hover,
+.resize-handle-x.dragging { background: var(--accent); }
+.resize-handle-x::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -4px; right: -4px; /* wider hit target */
+}
+
+.resize-handle-y {
+  height: 4px;
+  cursor: row-resize;
+  background: transparent;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  z-index: 20;
+  position: relative;
+}
+.resize-handle-y:hover,
+.resize-handle-y.dragging { background: var(--accent); }
+.resize-handle-y::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: -4px; bottom: -4px;
+}
+
+/* ════════════════════════════════════════════════════════
+   PINK CURSOR GLOW
+   ════════════════════════════════════════════════════════ */
+.cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224,64,160,0.07) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: left 0.08s ease-out, top 0.08s ease-out;
+  z-index: 0;
+  mix-blend-mode: screen;
+}
+.cursor-dot {
+  pointer-events: none;
+  position: fixed;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translate(-50%, -50%);
+  transition: left 0.04s, top 0.04s;
+  z-index: 9999;
+  opacity: 0.75;
+  box-shadow: 0 0 8px 2px var(--accent);
+}
+body { cursor: none; }
+a, button, .tab, .tree-file, .act-icon, .cmd-item, .proj-card,
+.contact-link, .skill-item, .ptab, input { cursor: none; }
+
+/* ════════════════════════════════════════════════════════
+   VSCODE NOTIFICATION
+   ════════════════════════════════════════════════════════ */
+.notif-container {
+  position: fixed;
+  bottom: 30px; right: 16px;
+  z-index: 800;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+.notif {
+  background: var(--bg-palette);
+  border: 1px solid var(--border-light);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 12px 14px;
+  width: 300px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  pointer-events: all;
+  animation: slideIn 0.3s cubic-bezier(0.16,1,0.3,1);
+  font-family: 'Inter', sans-serif;
+}
+@keyframes slideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+.notif-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.notif-title { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+.notif-close {
+  background: none; border: none; color: var(--text-muted);
+  cursor: none; font-size: 16px; line-height: 1; padding: 0 2px;
+  border-radius: 3px;
+}
+.notif-close:hover { color: var(--text-primary); background: var(--accent-glow); }
+.notif-msg { font-size: 12px; color: var(--text-mid); line-height: 1.5; margin-bottom: 10px; }
+.notif-actions { display: flex; gap: 6px; }
+.notif-btn {
+  font-size: 11px; padding: 4px 10px;
+  border-radius: 4px; border: none; cursor: none;
+  font-family: 'Inter', sans-serif; font-weight: 500;
+  transition: all 0.15s;
+}
+.notif-btn.primary { background: var(--accent); color: white; }
+.notif-btn.primary:hover { background: var(--accent2); }
+.notif-btn.secondary { background: var(--border-light); color: var(--text-mid); }
+.notif-btn.secondary:hover { background: var(--border); color: var(--text-primary); }
+
+/* ════════════════════════════════════════════════════════
+   QUICK CONTACT PLUGIN
+   ════════════════════════════════════════════════════════ */
+.contact-plugin-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 700;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+}
+.contact-plugin-overlay.open { display: flex; }
+.contact-plugin {
+  background: var(--bg-palette);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  width: min(440px, 92vw);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  animation: slideIn 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+.cp-header {
+  background: var(--bg-panel-hdr);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cp-title {
+  font-size: 12px; font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent2);
+  display: flex; align-items: center; gap: 8px;
+}
+.cp-close {
+  background: none; border: none;
+  color: var(--text-muted); font-size: 18px;
+  cursor: none; border-radius: 4px; padding: 0 4px; line-height: 1;
+}
+.cp-close:hover { color: var(--text-primary); }
+.cp-body { padding: 20px; }
+.cp-field { margin-bottom: 14px; }
+.cp-label {
+  display: block; font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted); margin-bottom: 5px;
+}
+.cp-input, .cp-textarea {
+  width: 100%; background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-light);
+  border-radius: 5px; padding: 9px 12px;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px; outline: none;
+  transition: border-color 0.15s;
+}
+.cp-input:focus, .cp-textarea:focus { border-color: var(--accent); }
+.cp-textarea { resize: vertical; min-height: 90px; }
+.cp-send {
+  width: 100%; padding: 10px;
+  background: var(--accent); color: white;
+  border: none; border-radius: 6px;
+  font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: none; transition: background 0.15s;
+  margin-top: 4px;
+}
+.cp-send:hover { background: var(--accent2); }
+.cp-sent {
+  text-align: center; padding: 30px 20px;
+  display: none;
+}
+.cp-sent .big-check { font-size: 36px; margin-bottom: 10px; }
+.cp-sent p { color: var(--text-mid); font-size: 13px; font-family: 'Inter', sans-serif; }
+
+/* ════════════════════════════════════════════════════════
    SCROLLBAR global
    ════════════════════════════════════════════════════════ */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -706,6 +902,44 @@ body {
 </style>
 </head>
 <body>
+
+<!-- ── CURSOR ────────────────────────────────────────────────── -->
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="cursor-dot"  id="cursorDot"></div>
+
+<!-- ── NOTIFICATION CONTAINER ──────────────────────────────── -->
+<div class="notif-container" id="notifContainer"></div>
+
+<!-- ── QUICK CONTACT PLUGIN ─────────────────────────────────── -->
+<div class="contact-plugin-overlay" id="contactPlugin" onclick="closeContact(event)">
+  <div class="contact-plugin">
+    <div class="cp-header">
+      <div class="cp-title">
+        <span style="color:var(--accent)">✦</span> send a message — contact.ts
+      </div>
+      <button class="cp-close" onclick="closeContactPlugin()">×</button>
+    </div>
+    <div class="cp-body" id="cpBody">
+      <div class="cp-field">
+        <label class="cp-label">// your name</label>
+        <input class="cp-input" id="cpName" type="text" placeholder="Jane Doe" />
+      </div>
+      <div class="cp-field">
+        <label class="cp-label">// your email</label>
+        <input class="cp-input" id="cpEmail" type="email" placeholder="jane@example.com" />
+      </div>
+      <div class="cp-field">
+        <label class="cp-label">// message</label>
+        <textarea class="cp-textarea" id="cpMsg" placeholder="Hey Afaf, I'd love to connect about..."></textarea>
+      </div>
+      <button class="cp-send" onclick="sendContact()">Send Message →</button>
+    </div>
+    <div class="cp-sent" id="cpSent">
+      <div class="big-check">💌</div>
+      <p>Message sent! Afaf will get back to you soon.</p>
+    </div>
+  </div>
+</div>
 
 <!-- ── COMMAND PALETTE ─────────────────────────────────────── -->
 <div class="cmd-overlay" id="cmdOverlay" onclick="closePalette(event)">
@@ -796,6 +1030,9 @@ body {
       </div>
     </div>
   </div>
+
+  <!-- Sidebar resize handle -->
+  <div class="resize-handle-x" id="sidebarHandle"></div>
 
   <!-- Editor Area -->
   <div class="editor-area">
@@ -1008,11 +1245,19 @@ body {
           <div><div class="c-label">Resume</div><div class="c-val">View / Download PDF</div></div>
         </a>
 
-        <div class="cl" style="margin-top:10px;"><span class="ln">6</span><span class="lc">};</span></div>
+        <div style="margin: 12px 52px;">
+          <button onclick="openContactPlugin()" style="background:var(--accent);color:white;border:none;border-radius:6px;padding:10px 20px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:none;transition:background 0.15s;width:100%;" onmouseover="this.style.background='var(--accent2)'" onmouseout="this.style.background='var(--accent)'">
+            ✦ Send Afaf a message
+          </button>
+        </div>
+        <div class="cl" style="margin-top:6px;"><span class="ln">6</span><span class="lc">};</span></div>
         <div class="cl"><span class="ln">7</span><span class="lc"></span></div>
         <div class="cl"><span class="ln">8</span><span class="lc"><span class="kw">export default</span> contact;</span></div>
       </div>
     </div>
+
+    <!-- Terminal resize handle -->
+    <div class="resize-handle-y" id="terminalHandle"></div>
 
     <!-- Terminal Panel -->
     <div class="panel" id="panel">
@@ -1315,6 +1560,188 @@ const boot = [
   { delay: 2400, html: `<span style="color:var(--yellow)">c7d8e9b</span> <span class="t-out">init: vscode portfolio — afafmaliha0716 ✦</span>` },
 ];
 boot.forEach(({delay, html}) => setTimeout(() => termLog(html), delay));
+
+/* ══════════════════════════════════════════════════════
+   PINK CURSOR GLOW
+══════════════════════════════════════════════════════ */
+const glow = document.getElementById('cursorGlow');
+const dot  = document.getElementById('cursorDot');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top  = e.clientY + 'px';
+  dot.style.left  = e.clientX + 'px';
+  dot.style.top   = e.clientY + 'px';
+});
+
+/* ══════════════════════════════════════════════════════
+   SIDEBAR RESIZE
+══════════════════════════════════════════════════════ */
+(function() {
+  const handle  = document.getElementById('sidebarHandle');
+  const sidebar = document.querySelector('.sidebar');
+  let dragging = false, startX = 0, startW = 0;
+
+  handle.addEventListener('mousedown', e => {
+    dragging = true; startX = e.clientX;
+    startW = sidebar.getBoundingClientRect().width;
+    handle.classList.add('dragging');
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'col-resize';
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const w = Math.max(160, Math.min(400, startW + (e.clientX - startX)));
+    sidebar.style.width = w + 'px';
+  });
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    handle.classList.remove('dragging');
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+  });
+})();
+
+/* ══════════════════════════════════════════════════════
+   TERMINAL RESIZE
+══════════════════════════════════════════════════════ */
+(function() {
+  const handle  = document.getElementById('terminalHandle');
+  const panel   = document.getElementById('panel');
+  let dragging = false, startY = 0, startH = 0;
+
+  handle.addEventListener('mousedown', e => {
+    dragging = true; startY = e.clientY;
+    startH = panel.getBoundingClientRect().height;
+    handle.classList.add('dragging');
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'row-resize';
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const h = Math.max(30, Math.min(500, startH - (e.clientY - startY)));
+    panel.style.height = h + 'px';
+  });
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    handle.classList.remove('dragging');
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+  });
+})();
+
+/* ══════════════════════════════════════════════════════
+   VSCODE NOTIFICATION
+══════════════════════════════════════════════════════ */
+function showNotif({ title, msg, primary, secondary, onPrimary, onSecondary }) {
+  const c = document.getElementById('notifContainer');
+  const el = document.createElement('div');
+  el.className = 'notif';
+  el.innerHTML = `
+    <div class="notif-header">
+      <span class="notif-title">${title}</span>
+      <button class="notif-close" onclick="this.closest('.notif').remove()">×</button>
+    </div>
+    <div class="notif-msg">${msg}</div>
+    <div class="notif-actions">
+      ${primary   ? `<button class="notif-btn primary"   id="np-${Date.now()}">${primary}</button>`   : ''}
+      ${secondary ? `<button class="notif-btn secondary" id="ns-${Date.now()}">${secondary}</button>` : ''}
+    </div>`;
+  c.appendChild(el);
+  if (primary && onPrimary) {
+    el.querySelector('.notif-btn.primary').addEventListener('click', () => { onPrimary(); el.remove(); });
+  }
+  if (secondary && onSecondary) {
+    el.querySelector('.notif-btn.secondary').addEventListener('click', () => { onSecondary(); el.remove(); });
+  }
+  // auto-dismiss after 8s
+  setTimeout(() => { if (el.parentNode) el.remove(); }, 8000);
+}
+
+// Show welcome notification after 2s
+setTimeout(() => {
+  showNotif({
+    title: '✦ Afaf Maliha',
+    msg: 'Afaf is open to connect — internships, collabs, or just a good conversation.',
+    primary: 'Connect →',
+    secondary: 'Maybe later',
+    onPrimary: () => { openTab('contact'); openContactPlugin(); },
+    onSecondary: () => {},
+  });
+}, 2000);
+
+/* ══════════════════════════════════════════════════════
+   QUICK CONTACT PLUGIN
+══════════════════════════════════════════════════════ */
+function openContactPlugin() {
+  document.getElementById('contactPlugin').classList.add('open');
+  document.getElementById('cpBody').style.display = 'block';
+  document.getElementById('cpSent').style.display = 'none';
+  setTimeout(() => document.getElementById('cpName').focus(), 50);
+}
+function closeContactPlugin() {
+  document.getElementById('contactPlugin').classList.remove('open');
+}
+function closeContact(e) {
+  if (e.target === document.getElementById('contactPlugin')) closeContactPlugin();
+}
+function sendContact() {
+  const name  = document.getElementById('cpName').value.trim();
+  const email = document.getElementById('cpEmail').value.trim();
+  const msg   = document.getElementById('cpMsg').value.trim();
+  if (!name || !email || !msg) {
+    showNotif({ title: '⚠ Incomplete', msg: 'Please fill in all fields before sending.' });
+    return;
+  }
+  // Open default mail client with pre-filled message
+  const subject = encodeURIComponent(`Hello from ${name} — Portfolio`);
+  const body    = encodeURIComponent(`Hi Afaf,\n\n${msg}\n\n— ${name} (${email})`);
+  window.open(`mailto:rohafatima289@gmail.com?subject=${subject}&body=${body}`);
+  // Show success state
+  document.getElementById('cpBody').style.display = 'none';
+  document.getElementById('cpSent').style.display = 'block';
+  termLog(`<span class="t-ok">✓</span> <span class="t-out">Message composed for ${email}. Opening mail client...</span>`);
+  setTimeout(closeContactPlugin, 2500);
+}
+
+/* ══════════════════════════════════════════════════════
+   KONAMI CODE EASTER EGG 🤘
+══════════════════════════════════════════════════════ */
+const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let konamiIdx = 0;
+document.addEventListener('keydown', e => {
+  if (e.key === KONAMI[konamiIdx]) {
+    konamiIdx++;
+    if (konamiIdx === KONAMI.length) {
+      konamiIdx = 0;
+      launchKonami();
+    }
+  } else { konamiIdx = 0; }
+});
+function launchKonami() {
+  showNotif({ title: '🤘 HOOK \'EM HORNS', msg: 'You found the easter egg. Afaf appreciates your dedication to clicking arrow keys.' });
+  termLog(`<span class="t-ok">🤘 HOOK 'EM HORNS 🤘</span>`);
+  // Pink confetti burst
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    const size = 6 + Math.random() * 8;
+    const colors = ['#e040a0','#ff6eb4','#c084fc','#ff79c6','#ffb86c'];
+    p.style.cssText = `position:fixed;width:${size}px;height:${size}px;border-radius:50%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      left:${Math.random()*100}vw;top:-10px;z-index:9000;pointer-events:none;
+      animation:fall ${1.5+Math.random()*2}s ease-in forwards;`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 3500);
+  }
+  // Add fall animation if not present
+  if (!document.getElementById('fall-anim')) {
+    const s = document.createElement('style');
+    s.id = 'fall-anim';
+    s.textContent = `@keyframes fall { to { transform: translateY(105vh) rotate(${Math.random()*360}deg); opacity:0; } }`;
+    document.head.appendChild(s);
+  }
+}
 
 /* ══════════════════════════════════════════════════════
    INIT
