@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Afaf Maliha — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+/* ════════════════════════════════════════════════════════
+   THEME TOKENS — dark (Night Pink) default
+   ════════════════════════════════════════════════════════ */
+:root {
+  /* Dark / Night Pink */
+  --bg-app:       #130a16;
+  --bg-titlebar:  #1a0d1f;
+  --bg-actbar:    #160c1a;
+  --bg-sidebar:   #180d1d;
+  --bg-editor:    #1c1025;
+  --bg-tab-act:   #1c1025;
+  --bg-tab-in:    #160c1a;
+  --bg-terminal:  #0e0812;
+  --bg-statusbar: #8b1a5c;
+  --bg-panel-hdr: #140b18;
+  --bg-palette:   #1e1128;
+  --bg-tooltip:   #2a1535;
+
+  --border:       #2d1535;
+  --border-light: #3d1f4a;
+
+  --text-primary: #e8c8d8;
+  --text-mid:     #c4909c;
+  --text-muted:   #7a4a6a;
+  --text-line:    #3d2248;
+  --text-white:   #f5e8f0;
+
+  --accent:       #e040a0;
+  --accent2:      #ff6eb4;
+  --accent-glow:  rgba(224,64,160,0.18);
+
+  --green:   #80d9a0;
+  --blue:    #7ecfff;
+  --yellow:  #ffb86c;
+  --purple:  #c084fc;
+  --teal:    #5eead4;
+  --red:     #ff6b9d;
+
+  --kw-color:   #ff79c6;
+  --str-color:  #80d9a0;
+  --cmt-color:  #5a3555;
+  --fn-color:   #c084fc;
+  --prop-color: #7ecfff;
+  --typ-color:  #ffb86c;
+  --num-color:  #ff6b9d;
+
+  --sidebar-w:   240px;
+  --actbar-w:    48px;
+  --tab-h:       35px;
+  --statusbar-h: 22px;
+  --titlebar-h:  30px;
+  --terminal-h:  170px;
+}
+
+/* Light / Day Pink overrides */
+[data-theme="light"] {
+  --bg-app:       #fce4ef;
+  --bg-titlebar:  #f2adc9;
+  --bg-actbar:    #f0a4c3;
+  --bg-sidebar:   #fbd0e3;
+  --bg-editor:    #fff5f9;
+  --bg-tab-act:   #fff5f9;
+  --bg-tab-in:    #f7c3d8;
+  --bg-terminal:  #2d1b25;
+  --bg-statusbar: #d63384;
+  --bg-panel-hdr: #f2adc9;
+  --bg-palette:   #fef0f6;
+  --bg-tooltip:   #fff0f8;
+
+  --border:       #f0a4c3;
+  --border-light: #fbd0e3;
+
+  --text-primary: #1e0d17;
+  --text-mid:     #5c2e47;
+  --text-muted:   #a06080;
+  --text-line:    #c4829a;
+  --text-white:   #1e0d17;
+
+  --accent:       #e8357a;
+  --accent2:      #c4205e;
+  --accent-glow:  rgba(232,53,122,0.14);
+
+  --kw-color:   #e8357a;
+  --str-color:  #2db97d;
+  --cmt-color:  #b06080;
+  --fn-color:   #9333ea;
+  --prop-color: #2563eb;
+  --typ-color:  #d97706;
+  --num-color:  #e8357a;
+}
+
+/* ════════════════════════════════════════════════════════
+   RESET & BASE
+   ════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  transition: background 0.25s, color 0.25s;
+}
+
+/* ════════════════════════════════════════════════════════
+   TITLE BAR
+   ════════════════════════════════════════════════════════ */
+.titlebar {
+  height: var(--titlebar-h);
+  background: var(--bg-titlebar);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  user-select: none;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 16px;
+}
+.titlebar-controls { display: flex; gap: 7px; }
+.titlebar-controls span {
+  width: 12px; height: 12px; border-radius: 50%; cursor: pointer; display: inline-block;
+}
+.tc-close { background: #ff6b6b; }
+.tc-min   { background: #ffd93d; }
+.tc-max   { background: #6bcb77; }
+.titlebar-menus { display: flex; gap: 2px; }
+.titlebar-menus span {
+  font-size: 12px; color: var(--text-muted);
+  padding: 2px 8px; border-radius: 3px; cursor: default;
+}
+.titlebar-menus span:hover { background: var(--accent-glow); color: var(--text-primary); }
+.titlebar-center {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-size: 12px; color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  pointer-events: none;
+}
+
+/* ════════════════════════════════════════════════════════
+   VSCODE BODY
+   ════════════════════════════════════════════════════════ */
+.vscode-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ════════════════════════════════════════════════════════
+   ACTIVITY BAR
+   ════════════════════════════════════════════════════════ */
+.actbar {
+  width: var(--actbar-w);
+  background: var(--bg-actbar);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 4px;
+  border-right: 1px solid var(--border);
+  flex-shrink: 0;
+  z-index: 10;
+}
+.act-icon {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; cursor: pointer; color: var(--text-muted);
+  transition: all 0.15s; position: relative;
+}
+.act-icon:hover { color: var(--text-primary); background: var(--accent-glow); }
+.act-icon.active {
+  color: var(--accent);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+  margin-left: -1px;
+}
+.act-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.act-bottom { margin-top: auto; }
+
+/* ════════════════════════════════════════════════════════
+   SIDEBAR
+   ════════════════════════════════════════════════════════ */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.sidebar-hdr {
+  padding: 10px 12px 6px;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.file-tree { overflow-y: auto; flex: 1; padding-bottom: 12px; }
+.tree-group { margin-top: 2px; }
+.tree-folder {
+  display: flex; align-items: center; gap: 5px;
+  padding: 4px 10px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+  color: var(--text-muted); cursor: pointer; text-transform: uppercase;
+  user-select: none;
+}
+.tree-folder svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+.tree-file {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 10px 4px 22px;
+  font-size: 12.5px;
+  color: var(--text-mid);
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  transition: background 0.1s;
+  position: relative;
+}
+.tree-file:hover { background: var(--accent-glow); color: var(--text-primary); }
+.tree-file.active {
+  background: var(--accent-glow);
+  color: var(--accent2);
+}
+.tree-file.active::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2px; background: var(--accent);
+}
+.f-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ts   { background: #5b9cf6; }
+.tsx  { background: #c084fc; }
+.json { background: #ffb86c; }
+.md   { background: #5eead4; }
+
+/* ════════════════════════════════════════════════════════
+   EDITOR AREA
+   ════════════════════════════════════════════════════════ */
+.editor-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg-editor);
+}
+
+/* Tab bar */
+.tab-bar {
+  height: var(--tab-h);
+  background: var(--bg-tab-in);
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+
+.tab {
+  height: 32px;
+  padding: 0 14px;
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+  border-right: 1px solid var(--border);
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.12s;
+  position: relative;
+}
+.tab:hover { color: var(--text-primary); background: var(--accent-glow); }
+.tab.active {
+  background: var(--bg-tab-act);
+  color: var(--text-primary);
+  border-top: 1.5px solid var(--accent);
+  height: 34px;
+}
+.tab .tdot { width: 7px; height: 7px; border-radius: 50%; }
+.tab .tx {
+  font-size: 13px; color: var(--text-muted); margin-left: 2px;
+  opacity: 0; transition: opacity 0.1s; line-height: 1;
+}
+.tab:hover .tx { opacity: 1; }
+.tab.active .tx { opacity: 0.5; }
+.tab.active:hover .tx { opacity: 1; }
+
+/* Editor pane */
+.editor-pane {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+.editor-pane.active { display: flex; }
+
+.breadcrumb {
+  padding: 4px 16px;
+  font-size: 11.5px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-editor);
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 6px;
+}
+.bc-sep { opacity: 0.4; }
+.bc-act { color: var(--accent2); }
+
+.editor-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 0 40px;
+}
+.editor-scroll::-webkit-scrollbar { width: 8px; }
+.editor-scroll::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+
+/* Code lines */
+.cl {
+  display: flex;
+  min-height: 21px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 21px;
+}
+.cl:hover { background: rgba(255,255,255,0.025); }
+.ln {
+  width: 52px;
+  text-align: right;
+  padding-right: 20px;
+  color: var(--text-line);
+  font-size: 12px;
+  user-select: none;
+  flex-shrink: 0;
+}
+.lc { flex: 1; padding-right: 24px; white-space: pre-wrap; word-break: break-word; }
+
+/* Syntax */
+.kw   { color: var(--kw-color); font-weight: 500; }
+.str  { color: var(--str-color); }
+.cmt  { color: var(--cmt-color); font-style: italic; }
+.fn   { color: var(--fn-color); }
+.prop { color: var(--prop-color); }
+.typ  { color: var(--typ-color); }
+.num  { color: var(--num-color); }
+.acc  { color: var(--accent2); }
+
+/* ════════════════════════════════════════════════════════
+   CONTENT BLOCKS
+   ════════════════════════════════════════════════════════ */
+.bio-block {
+  margin: 6px 52px;
+  padding: 18px 22px;
+  background: var(--accent-glow);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+}
+.bio-block h1 {
+  font-size: 21px; font-weight: 700;
+  color: var(--text-primary); font-family: 'Inter', sans-serif;
+  margin-bottom: 3px;
+}
+.bio-block h2 {
+  font-size: 13px; font-weight: 400;
+  color: var(--accent2); font-family: 'Inter', sans-serif;
+  margin-bottom: 12px;
+}
+.bio-block p {
+  font-size: 13px; line-height: 1.75;
+  color: var(--text-mid); font-family: 'Inter', sans-serif;
+  margin-bottom: 6px;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tag {
+  background: var(--accent-glow);
+  color: var(--accent2);
+  border: 1px solid var(--accent);
+  padding: 3px 10px; border-radius: 12px;
+  font-size: 11px; font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Project card */
+.proj-card {
+  margin: 5px 52px;
+  padding: 15px 18px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: all 0.2s;
+  cursor: default;
+}
+.proj-card:hover {
+  border-color: var(--accent);
+  transform: translateX(5px);
+  box-shadow: 0 4px 20px var(--accent-glow);
+  background: var(--accent-glow);
+}
+.proj-card h3 {
+  font-size: 14px; font-weight: 600;
+  color: var(--text-primary); font-family: 'Inter', sans-serif;
+  margin-bottom: 5px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.proj-card h3 a {
+  font-size: 11px; font-weight: 400;
+  color: var(--accent); text-decoration: none;
+  padding: 1px 8px; border: 1px solid var(--accent);
+  border-radius: 10px; transition: all 0.15s;
+}
+.proj-card h3 a:hover { background: var(--accent); color: #fff; }
+.proj-card h3 a.live { color: var(--blue); border-color: var(--blue); }
+.proj-card h3 a.live:hover { background: var(--blue); color: #fff; }
+.proj-card p {
+  font-size: 12.5px; color: var(--text-mid);
+  line-height: 1.65; font-family: 'Inter', sans-serif;
+}
+
+/* Experience card */
+.exp-card {
+  margin: 5px 52px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--purple);
+  border-radius: 0 8px 8px 0;
+}
+.exp-card h3 { font-size: 14px; font-weight: 600; color: var(--text-primary); font-family: 'Inter', sans-serif; }
+.exp-meta { font-size: 11.5px; color: var(--accent2); font-family: 'Inter', sans-serif; margin: 4px 0 9px; }
+.exp-card p { font-size: 12.5px; color: var(--text-mid); line-height: 1.7; font-family: 'Inter', sans-serif; }
+
+/* Skills grid */
+.skills-grid {
+  margin: 6px 52px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 7px;
+}
+.skill-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px 13px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-mid);
+  display: flex; align-items: center; gap: 8px;
+  transition: all 0.15s;
+}
+.skill-item:hover { border-color: var(--accent); color: var(--text-primary); transform: translateY(-1px); }
+.sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* Contact */
+.contact-link {
+  margin: 4px 52px;
+  padding: 11px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+  transition: all 0.15s;
+  color: inherit;
+}
+.contact-link:hover { border-color: var(--accent); transform: translateX(5px); background: var(--accent-glow); }
+.c-icon { font-size: 18px; }
+.c-label { font-size: 11px; color: var(--text-muted); font-family: 'Inter', sans-serif; }
+.c-val { font-size: 13px; color: var(--text-primary); font-family: 'JetBrains Mono', monospace; }
+
+/* ════════════════════════════════════════════════════════
+   TERMINAL PANEL
+   ════════════════════════════════════════════════════════ */
+.panel {
+  height: var(--terminal-h);
+  background: var(--bg-terminal);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: height 0.2s;
+}
+.panel.collapsed { height: 30px; }
+.panel-hdr {
+  display: flex;
+  align-items: center;
+  background: var(--bg-panel-hdr);
+  border-bottom: 1px solid var(--border);
+  padding: 0 8px;
+  height: 30px;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.ptab {
+  padding: 4px 12px;
+  font-size: 11px; font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted); cursor: pointer; border-radius: 3px;
+}
+.ptab.active { background: var(--accent-glow); color: var(--accent2); }
+.panel-ctrl { margin-left: auto; display: flex; gap: 8px; }
+.panel-ctrl button {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-muted); font-size: 13px; padding: 2px 4px;
+  border-radius: 3px; transition: color 0.1s;
+}
+.panel-ctrl button:hover { color: var(--accent2); }
+
+.terminal-body {
+  flex: 1;
+  padding: 8px 16px 4px;
+  overflow-y: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.75;
+  display: flex;
+  flex-direction: column;
+}
+.terminal-body::-webkit-scrollbar { width: 5px; }
+.terminal-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.t-log { color: var(--text-muted); }
+.t-ok  { color: var(--green); }
+.t-err { color: var(--red); }
+.t-warn{ color: var(--yellow); }
+.t-pmt { color: var(--accent); }
+.t-cmd { color: var(--text-primary); }
+.t-path{ color: var(--blue); }
+.t-out { color: var(--text-muted); }
+
+.term-input-row {
+  display: flex; align-items: center; gap: 0; margin-top: auto;
+  padding-top: 4px;
+}
+.term-prompt-str { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 12px; flex-shrink: 0; }
+.term-input {
+  background: transparent;
+  border: none; outline: none;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  flex: 1;
+  caret-color: var(--accent);
+}
+
+.problems-body {
+  flex: 1; padding: 8px 16px; overflow-y: auto;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  display: none;
+}
+.problems-body.active { display: block; }
+.terminal-body.active { display: flex; }
+.prob-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 4px 0; border-bottom: 1px solid var(--border);
+  line-height: 1.5; cursor: default;
+}
+.prob-row:hover { background: var(--accent-glow); margin: 0 -16px; padding: 4px 16px; }
+.prob-icon { flex-shrink: 0; font-size: 13px; }
+.prob-msg { color: var(--text-mid); font-size: 12px; }
+.prob-loc { color: var(--text-muted); font-size: 11px; margin-left: auto; white-space: nowrap; }
+
+/* ════════════════════════════════════════════════════════
+   STATUS BAR
+   ════════════════════════════════════════════════════════ */
+.statusbar {
+  height: var(--statusbar-h);
+  background: var(--bg-statusbar);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: rgba(255,255,255,0.9);
+  gap: 14px;
+  flex-shrink: 0;
+  user-select: none;
+}
+.sb-item { cursor: default; display: flex; align-items: center; gap: 4px; }
+.sb-item:hover { background: rgba(255,255,255,0.12); padding: 0 4px; border-radius: 2px; }
+.sb-right { margin-left: auto; display: flex; gap: 12px; align-items: center; }
+.sb-branch svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* Theme toggle */
+.theme-toggle {
+  cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  font-size: 13px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  line-height: 1;
+  transition: background 0.15s;
+}
+.theme-toggle:hover { background: rgba(255,255,255,0.2); }
+
+/* ════════════════════════════════════════════════════════
+   COMMAND PALETTE
+   ════════════════════════════════════════════════════════ */
+.cmd-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1000;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 80px;
+  backdrop-filter: blur(2px);
+}
+.cmd-overlay.open { display: flex; }
+.cmd-palette {
+  width: min(560px, 90vw);
+  background: var(--bg-palette);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.cmd-input-row {
+  display: flex; align-items: center;
+  padding: 0 14px; gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.cmd-input-row svg { width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2; }
+.cmd-input {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px; color: var(--text-primary);
+  padding: 14px 0;
+  caret-color: var(--accent);
+}
+.cmd-results { max-height: 320px; overflow-y: auto; }
+.cmd-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  color: var(--text-mid);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.cmd-item:hover, .cmd-item.focused {
+  background: var(--accent-glow);
+  color: var(--text-primary);
+}
+.cmd-item .c-left { flex: 1; }
+.cmd-item .c-name { font-size: 13px; color: var(--text-primary); }
+.cmd-item .c-desc { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.cmd-item .c-kbd {
+  font-size: 10px; color: var(--text-muted);
+  background: var(--border); padding: 2px 6px;
+  border-radius: 3px; white-space: nowrap;
+}
+.cmd-item .cdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.cmd-footer {
+  padding: 6px 14px;
+  font-size: 10.5px; color: var(--text-muted);
+  display: flex; gap: 14px;
+  border-top: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ════════════════════════════════════════════════════════
+   TOOLTIP (IntelliSense)
+   ════════════════════════════════════════════════════════ */
+.tooltip {
+  position: absolute;
+  background: var(--bg-tooltip);
+  border: 1px solid var(--border-light);
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-primary);
+  max-width: 300px;
+  z-index: 500;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  display: none;
+  line-height: 1.6;
+}
+.tooltip .tt-type { color: var(--typ-color); font-size: 11px; margin-bottom: 4px; }
+.tooltip .tt-desc { color: var(--text-mid); font-size: 11.5px; }
+
+/* ════════════════════════════════════════════════════════
+   SCROLLBAR global
+   ════════════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+
+/* ════════════════════════════════════════════════════════
+   MOBILE
+   ════════════════════════════════════════════════════════ */
+@media (max-width: 680px) {
+  .sidebar, .actbar { display: none; }
+  .titlebar-menus { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── COMMAND PALETTE ─────────────────────────────────────── -->
+<div class="cmd-overlay" id="cmdOverlay" onclick="closePalette(event)">
+  <div class="cmd-palette">
+    <div class="cmd-input-row">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="cmd-input" id="cmdInput" placeholder="Type a command or file name..." oninput="filterCmd()" onkeydown="cmdKey(event)" autocomplete="off" />
+    </div>
+    <div class="cmd-results" id="cmdResults"></div>
+    <div class="cmd-footer">
+      <span>↑↓ navigate</span>
+      <span>↵ open</span>
+      <span>esc close</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOOLTIP ─────────────────────────────────────────────── -->
+<div class="tooltip" id="tooltip">
+  <div class="tt-type" id="tt-type"></div>
+  <div class="tt-desc" id="tt-desc"></div>
+</div>
+
+<!-- ── TITLE BAR ───────────────────────────────────────────── -->
+<div class="titlebar">
+  <div class="titlebar-controls">
+    <span class="tc-close"></span>
+    <span class="tc-min"></span>
+    <span class="tc-max"></span>
+  </div>
+  <div class="titlebar-menus">
+    <span>File</span><span>Edit</span><span>View</span><span>Go</span>
+    <span onclick="openPalette()">Run</span>
+  </div>
+  <div class="titlebar-center">portfolio — afafmaliha0716.github.io</div>
+</div>
+
+<!-- ── VSCODE BODY ─────────────────────────────────────────── -->
+<div class="vscode-body">
+
+  <!-- Activity Bar -->
+  <div class="actbar">
+    <div class="act-icon active" title="Explorer">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    </div>
+    <div class="act-icon" title="Search (Ctrl+Shift+P)" onclick="openPalette()">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </div>
+    <div class="act-icon" title="Source Control">
+      <svg viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6M18 15v-4a4 4 0 0 0-4-4H9"/></svg>
+    </div>
+    <div class="act-icon" title="GitHub" onclick="window.open('https://github.com/afafmaliha0716','_blank')">
+      <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+    </div>
+    <div class="act-bottom">
+      <div class="act-icon" title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-hdr">
+      <span>Explorer</span>
+    </div>
+    <div class="file-tree">
+      <div class="tree-group">
+        <div class="tree-folder">
+          <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          PORTFOLIO
+        </div>
+        <div class="tree-file active" id="tf-about"      onclick="openTab('about')">      <span class="f-dot ts"></span>about.ts</div>
+        <div class="tree-file"        id="tf-projects"   onclick="openTab('projects')">   <span class="f-dot tsx"></span>projects.tsx</div>
+        <div class="tree-file"        id="tf-experience" onclick="openTab('experience')"> <span class="f-dot tsx"></span>experience.tsx</div>
+        <div class="tree-file"        id="tf-skills"     onclick="openTab('skills')">     <span class="f-dot json"></span>skills.json</div>
+        <div class="tree-file"        id="tf-contact"    onclick="openTab('contact')">    <span class="f-dot ts"></span>contact.ts</div>
+      </div>
+      <div class="tree-group" style="margin-top:8px;">
+        <div class="tree-folder">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          node_modules
+        </div>
+        <div class="tree-folder">
+          <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          .git
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Editor Area -->
+  <div class="editor-area">
+
+    <!-- Tab Bar -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- ── ABOUT ── -->
+    <div class="editor-pane active" id="pane-about">
+      <div class="breadcrumb"><span>portfolio</span><span class="bc-sep">›</span><span class="bc-act">about.ts</span></div>
+      <div class="editor-scroll">
+        <div class="cl"><span class="ln">1</span><span class="lc"><span class="cmt">/**</span></span></div>
+        <div class="cl"><span class="ln">2</span><span class="lc"><span class="cmt"> * @author  Afaf Maliha</span></span></div>
+        <div class="cl"><span class="ln">3</span><span class="lc"><span class="cmt"> * @school  UT Austin — Computer Science, Year 3</span></span></div>
+        <div class="cl"><span class="ln">4</span><span class="lc"><span class="cmt"> * @roles   Software Engineer · Product Manager</span></span></div>
+        <div class="cl"><span class="ln">5</span><span class="lc"><span class="cmt"> */</span></span></div>
+        <div class="cl"><span class="ln">6</span><span class="lc"></span></div>
+        <div class="cl"><span class="ln">7</span><span class="lc"><span class="kw">const</span> <span class="fn" data-tt="type: const afaf" data-ttd="3rd year CS student at UT Austin who builds things that matter ✦">afaf</span> <span class="kw">=</span> {</span></div>
+        <div class="cl"><span class="ln">8</span><span class="lc">  <span class="prop">name</span>:       <span class="str">"Afaf Maliha"</span>,</span></div>
+        <div class="cl"><span class="ln">9</span><span class="lc">  <span class="prop">university</span>: <span class="str">"The University of Texas at Austin"</span>,</span></div>
+        <div class="cl"><span class="ln">10</span><span class="lc">  <span class="prop">major</span>:      <span class="str">"Computer Science"</span>,</span></div>
+        <div class="cl"><span class="ln">11</span><span class="lc">  <span class="prop">year</span>:       <span class="num">3</span>,</span></div>
+        <div class="cl"><span class="ln">12</span><span class="lc">  <span class="prop">roles</span>:      [<span class="str">"Software Engineer"</span>, <span class="str">"Product Manager"</span>],</span></div>
+        <div class="cl"><span class="ln">13</span><span class="lc">  <span class="prop">currently</span>:  <span class="str">"[What you're building / working on right now]"</span>,</span></div>
+        <div class="cl"><span class="ln">14</span><span class="lc">};</span></div>
+        <div class="cl"><span class="ln">15</span><span class="lc"></span></div>
+
+        <div class="bio-block">
+          <h1>Hi, I'm Afaf 👋</h1>
+          <h2>CS @ UT Austin · Software Engineer · Product Manager</h2>
+          <p>
+            I'm a third-year Computer Science student at UT Austin who loves building things that live at the intersection of solid engineering and thoughtful product thinking. Whether I'm writing code, shaping a roadmap, or digging into user research — I care about the "why" as much as the "how."
+          </p>
+          <p>
+            I'm equally comfortable in a codebase and in a strategy doc. Right now I'm focused on [what you're working on], and I'm always down to talk about [interest].
+          </p>
+          <div class="tags">
+            <span class="tag">React</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">Python</span>
+            <span class="tag">Product Strategy</span>
+            <span class="tag">UT Austin 🤘</span>
+          </div>
+        </div>
+
+        <div class="cl"><span class="ln">16</span><span class="lc"></span></div>
+        <div class="cl"><span class="ln">17</span><span class="lc"><span class="kw">export default</span> afaf;</span></div>
+        <div class="cl"><span class="ln">18</span><span class="lc"></span></div>
+      </div>
+    </div>
+
+    <!-- ── PROJECTS ── -->
+    <div class="editor-pane" id="pane-projects">
+      <div class="breadcrumb"><span>portfolio</span><span class="bc-sep">›</span><span class="bc-act">projects.tsx</span></div>
+      <div class="editor-scroll">
+        <div class="cl"><span class="ln">1</span><span class="lc"><span class="cmt">// ── Projects ─────────────────────────────────────────────</span></span></div>
+        <div class="cl"><span class="ln">2</span><span class="lc"><span class="cmt">// Things I've built, shipped, and learned from ✦</span></span></div>
+        <div class="cl"><span class="ln">3</span><span class="lc"></span></div>
+        <div class="cl"><span class="ln">4</span><span class="lc"><span class="kw">const</span> <span class="fn">projects</span>: <span class="typ">Project[]</span> = [</span></div>
+        <div class="cl"><span class="ln">5</span><span class="lc"></span></div>
+
+        <div class="proj-card">
+          <h3>🌸 [Project Name 1] <a href="#" target="_blank">GitHub ↗</a> <a href="#" target="_blank" class="live">Live ↗</a></h3>
+          <p>[What it does and why you built it. What problem does it solve? 2–3 sentences. Mention scale or impact if you have it.]</p>
+          <div class="tags" style="margin-top:8px;"><span class="tag">React</span><span class="tag">Node.js</span><span class="tag">MongoDB</span></div>
+        </div>
+
+        <div class="proj-card">
+          <h3>✦ [Project Name 2] <a href="#" target="_blank">GitHub ↗</a></h3>
+          <p>[Description — highlight the technical challenge you solved or what you learned building this.]</p>
+          <div class="tags" style="margin-top:8px;"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span></div>
+        </div>
+
+        <div class="proj-card">
+          <h3>💅 [Project Name 3] <a href="#" target="_blank">GitHub ↗</a> <a href="#" target="_blank" class="live">Live ↗</a></h3>
+          <p>[Description — any user feedback, metrics, or teammates involved make this section shine.]</p>
+          <div class="tags" style="margin-top:8px;"><span class="tag">TypeScript</span><span class="tag">Figma</span><span class="tag">AWS</span></div>
+        </div>
+
+        <div class="proj-card">
+          <h3>🔮 [Project Name 4] <a href="#" target="_blank">GitHub ↗</a></h3>
+          <p>[Description]</p>
+          <div class="tags" style="margin-top:8px;"><span class="tag">ML</span><span class="tag">Pandas</span><span class="tag">Scikit-learn</span></div>
+        </div>
+
+        <div class="cl" style="margin-top:8px;"><span class="ln">6</span><span class="lc">];</span></div>
+        <div class="cl"><span class="ln">7</span><span class="lc"><span class="kw">export default</span> projects;</span></div>
+      </div>
+    </div>
+
+    <!-- ── EXPERIENCE ── -->
+    <div class="editor-pane" id="pane-experience">
+      <div class="breadcrumb"><span>portfolio</span><span class="bc-sep">›</span><span class="bc-act">experience.tsx</span></div>
+      <div class="editor-scroll">
+        <div class="cl"><span class="ln">1</span><span class="lc"><span class="cmt">// ── Internships & Experience ──────────────────────────────</span></span></div>
+        <div class="cl"><span class="ln">2</span><span class="lc"></span></div>
+        <div class="cl"><span class="ln">3</span><span class="lc"><span class="kw">type</span> <span class="typ">Role</span> = { <span class="prop">company</span>: <span class="typ">string</span>; <span class="prop">title</span>: <span class="typ">string</span>; <span class="prop">period</span>: <span class="typ">string</span>; };</span></div>
+        <div class="cl"><span class="ln">4</span><span class="lc"></span></div>
+
+        <div class="exp-card">
+          <h3>[Company] · [Your Title]</h3>
+          <div class="exp-meta">📍 [Location] &nbsp;·&nbsp; [Month Year] – [Month Year]</div>
+          <p>
+            • [Key achievement — quantify where possible: "reduced load time by 40%", "shipped feature used by 10k users"]<br/>
+            • [Technical contribution — what you built or improved]<br/>
+            • [Team/scope — how big was the team, what part of the product did you own]
+          </p>
+          <div class="tags" style="margin-top:9px;"><span class="tag">React</span><span class="tag">Python</span><span class="tag">Agile</span></div>
+        </div>
+
+        <div class="exp-card" style="border-left-color:var(--blue);margin-top:8px;">
+          <h3>[Company] · [Your Title]</h3>
+          <div class="exp-meta" style="color:var(--blue);">📍 [Location] &nbsp;·&nbsp; [Month Year] – [Month Year]</div>
+          <p>
+            • [Achievement]<br/>
+            • [Technical contribution]<br/>
+            • [Impact or learning]
+          </p>
+          <div class="tags" style="margin-top:9px;"><span class="tag">SQL</span><span class="tag">Tableau</span><span class="tag">Product Roadmapping</span></div>
+        </div>
+
+        <div class="cl" style="margin-top:12px;"><span class="ln">5</span><span class="lc"><span class="cmt">// ── Campus Involvement ────────────────────────────────────</span></span></div>
+        <div class="cl"><span class="ln">6</span><span class="lc"></span></div>
+
+        <div class="exp-card" style="border-left-color:var(--green);margin-top:4px;">
+          <h3>[Club / Organization] · [Your Role]</h3>
+          <div class="exp-meta" style="color:var(--green);">UT Austin &nbsp;·&nbsp; [Period]</div>
+          <p>
+            • [What you did, led, or organized]<br/>
+            • [Scale — members, events, projects]
+          </p>
+        </div>
+
+        <div class="cl" style="margin-top:8px;"><span class="ln">7</span><span class="lc"><span class="kw">export default</span> experience;</span></div>
+      </div>
+    </div>
+
+    <!-- ── SKILLS ── -->
+    <div class="editor-pane" id="pane-skills">
+      <div class="breadcrumb"><span>portfolio</span><span class="bc-sep">›</span><span class="bc-act">skills.json</span></div>
+      <div class="editor-scroll">
+        <div class="cl"><span class="ln">1</span><span class="lc">{</span></div>
+        <div class="cl"><span class="ln">2</span><span class="lc">  <span class="prop">"languages"</span>: [</span></div>
+        <div class="skills-grid">
+          <div class="skill-item"><span class="sdot" style="background:#5b9cf6"></span>Python</div>
+          <div class="skill-item"><span class="sdot" style="background:#f7c948"></span>JavaScript</div>
+          <div class="skill-item"><span class="sdot" style="background:#3178c6"></span>TypeScript</div>
+          <div class="skill-item"><span class="sdot" style="background:#e8357a"></span>Java</div>
+          <div class="skill-item"><span class="sdot" style="background:#888"></span>C/C++</div>
+          <div class="skill-item"><span class="sdot" style="background:#f05032"></span>SQL</div>
+        </div>
+        <div class="cl"><span class="ln">3</span><span class="lc">  ],</span></div>
+        <div class="cl"><span class="ln">4</span><span class="lc">  <span class="prop">"frameworks"</span>: [</span></div>
+        <div class="skills-grid">
+          <div class="skill-item"><span class="sdot" style="background:#61dafb"></span>React</div>
+          <div class="skill-item"><span class="sdot" style="background:#aaa"></span>Next.js</div>
+          <div class="skill-item"><span class="sdot" style="background:#68a063"></span>Node.js</div>
+          <div class="skill-item"><span class="sdot" style="background:#009688"></span>FastAPI</div>
+          <div class="skill-item"><span class="sdot" style="background:#c084fc"></span>TailwindCSS</div>
+          <div class="skill-item"><span class="sdot" style="background:#80d9a0"></span>Flask</div>
+        </div>
+        <div class="cl"><span class="ln">5</span><span class="lc">  ],</span></div>
+        <div class="cl"><span class="ln">6</span><span class="lc">  <span class="prop">"tools"</span>: [</span></div>
+        <div class="skills-grid">
+          <div class="skill-item"><span class="sdot" style="background:#f05032"></span>Git / GitHub</div>
+          <div class="skill-item"><span class="sdot" style="background:#ff9900"></span>AWS</div>
+          <div class="skill-item"><span class="sdot" style="background:#2496ed"></span>Docker</div>
+          <div class="skill-item"><span class="sdot" style="background:#f24e1e"></span>Figma</div>
+          <div class="skill-item"><span class="sdot" style="background:#0052cc"></span>Jira / Linear</div>
+          <div class="skill-item"><span class="sdot" style="background:#e040a0"></span>Notion</div>
+        </div>
+        <div class="cl"><span class="ln">7</span><span class="lc">  ],</span></div>
+        <div class="cl"><span class="ln">8</span><span class="lc">  <span class="prop">"product"</span>: [</span></div>
+        <div class="skills-grid">
+          <div class="skill-item"><span class="sdot" style="background:#80d9a0"></span>Product Strategy</div>
+          <div class="skill-item"><span class="sdot" style="background:#ffb86c"></span>User Research</div>
+          <div class="skill-item"><span class="sdot" style="background:#7ecfff"></span>A/B Testing</div>
+          <div class="skill-item"><span class="sdot" style="background:#c084fc"></span>Roadmapping</div>
+          <div class="skill-item"><span class="sdot" style="background:#ff6b9d"></span>Data Analysis</div>
+        </div>
+        <div class="cl"><span class="ln">9</span><span class="lc">  ]</span></div>
+        <div class="cl"><span class="ln">10</span><span class="lc">}</span></div>
+      </div>
+    </div>
+
+    <!-- ── CONTACT ── -->
+    <div class="editor-pane" id="pane-contact">
+      <div class="breadcrumb"><span>portfolio</span><span class="bc-sep">›</span><span class="bc-act">contact.ts</span></div>
+      <div class="editor-scroll">
+        <div class="cl"><span class="ln">1</span><span class="lc"><span class="cmt">// ── Let's connect ────────────────────────────────────────</span></span></div>
+        <div class="cl"><span class="ln">2</span><span class="lc"><span class="cmt">// Open to internships, collabs & interesting conversations.</span></span></div>
+        <div class="cl"><span class="ln">3</span><span class="lc"></span></div>
+        <div class="cl"><span class="ln">4</span><span class="lc"><span class="kw">const</span> <span class="fn">contact</span> = {</span></div>
+        <div class="cl"><span class="ln">5</span><span class="lc"></span></div>
+
+        <a class="contact-link" href="mailto:rohafatima289@gmail.com">
+          <span class="c-icon">📧</span>
+          <div><div class="c-label">Email</div><div class="c-val">rohafatima289@gmail.com</div></div>
+        </a>
+        <a class="contact-link" href="https://linkedin.com/in/[handle]" target="_blank">
+          <span class="c-icon">🔗</span>
+          <div><div class="c-label">LinkedIn</div><div class="c-val">linkedin.com/in/[your-handle]</div></div>
+        </a>
+        <a class="contact-link" href="https://github.com/afafmaliha0716" target="_blank">
+          <span class="c-icon">🐙</span>
+          <div><div class="c-label">GitHub</div><div class="c-val">github.com/afafmaliha0716</div></div>
+        </a>
+        <a class="contact-link" href="#" target="_blank">
+          <span class="c-icon">📄</span>
+          <div><div class="c-label">Resume</div><div class="c-val">View / Download PDF</div></div>
+        </a>
+
+        <div class="cl" style="margin-top:10px;"><span class="ln">6</span><span class="lc">};</span></div>
+        <div class="cl"><span class="ln">7</span><span class="lc"></span></div>
+        <div class="cl"><span class="ln">8</span><span class="lc"><span class="kw">export default</span> contact;</span></div>
+      </div>
+    </div>
+
+    <!-- Terminal Panel -->
+    <div class="panel" id="panel">
+      <div class="panel-hdr">
+        <div class="ptab active" id="ptab-terminal" onclick="switchPanel('terminal')">TERMINAL</div>
+        <div class="ptab"        id="ptab-problems" onclick="switchPanel('problems')">PROBLEMS <span style="background:var(--red);color:#fff;border-radius:8px;padding:0 5px;font-size:10px;margin-left:3px;">3</span></div>
+        <div class="ptab"        id="ptab-output"   onclick="switchPanel('output')">OUTPUT</div>
+        <div class="panel-ctrl">
+          <button onclick="togglePanel()" title="Collapse/expand">⊟</button>
+          <button onclick="clearTerminal()" title="Clear terminal">⊗</button>
+        </div>
+      </div>
+      <div class="terminal-body active" id="terminal-body">
+        <div id="term-log"></div>
+        <div class="term-input-row">
+          <span class="term-prompt-str">afaf@portfolio:~$ </span>
+          <input class="term-input" id="termInput" placeholder="try: ls, whoami, help" onkeydown="termKey(event)" autocomplete="off" spellcheck="false" />
+        </div>
+      </div>
+      <div class="problems-body" id="problems-body">
+        <div class="prob-row"><span class="prob-icon">⚠️</span><span class="prob-msg"><span style="color:var(--yellow)">afaf.ts</span> — too many side projects (line 47)</span><span class="prob-loc">afaf.ts 47:1</span></div>
+        <div class="prob-row"><span class="prob-icon">⚠️</span><span class="prob-msg"><span style="color:var(--yellow)">schedule.ts</span> — sleep() called with argument 0</span><span class="prob-loc">schedule.ts 3:14</span></div>
+        <div class="prob-row"><span class="prob-icon">ℹ️</span><span class="prob-msg"><span style="color:var(--blue)">coffee.ts</span> — variable 'cups' may overflow</span><span class="prob-loc">coffee.ts 1:1</span></div>
+      </div>
+      <div class="problems-body" id="output-body" style="display:none;">
+        <span style="color:var(--green)">▸ Built in 0.42s &nbsp;·&nbsp; 5 files &nbsp;·&nbsp; No errors</span>
+      </div>
+    </div>
+
+  </div><!-- /editor-area -->
+</div><!-- /vscode-body -->
+
+<!-- Status Bar -->
+<div class="statusbar">
+  <div class="sb-item sb-branch">
+    <svg viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6M18 15v-4a4 4 0 0 0-4-4H9"/></svg>
+    main
+  </div>
+  <div class="sb-item">⚠ 2 &nbsp; ℹ 1</div>
+  <div class="sb-item" id="sb-file">about.ts</div>
+  <div class="sb-right">
+    <span class="sb-item" id="sb-status">● building something cool...</span>
+    <span class="sb-item">Ln 1, Col 1</span>
+    <span class="sb-item">UTF-8</span>
+    <span class="sb-item">TypeScript</span>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark theme" id="themeBtn">☀️</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   TABS & NAVIGATION
+══════════════════════════════════════════════════════ */
+const ALL_TABS = ['about','projects','experience','skills','contact'];
+const TAB_META = {
+  about:      { name:'about.ts',       dot:'ts'   },
+  projects:   { name:'projects.tsx',   dot:'tsx'  },
+  experience: { name:'experience.tsx', dot:'tsx'  },
+  skills:     { name:'skills.json',    dot:'json' },
+  contact:    { name:'contact.ts',     dot:'ts'   },
+};
+let openTabs = ['about'];
+let current  = 'about';
+
+function renderTabs() {
+  const bar = document.getElementById('tabBar');
+  bar.innerHTML = '';
+  openTabs.forEach(id => {
+    const m = TAB_META[id];
+    const d = document.createElement('div');
+    d.className = 'tab' + (id === current ? ' active' : '');
+    d.innerHTML = `<span class="tdot ${m.dot}"></span>${m.name}<span class="tx" onclick="closeTab(event,'${id}')">×</span>`;
+    d.onclick = () => openTab(id);
+    bar.appendChild(d);
+  });
+}
+
+function openTab(id) {
+  if (!openTabs.includes(id)) openTabs.push(id);
+  current = id;
+  ALL_TABS.forEach(f => {
+    document.getElementById('pane-' + f).classList.toggle('active', f === id);
+    document.getElementById('tf-' + f).classList.toggle('active', f === id);
+  });
+  document.getElementById('sb-file').textContent = TAB_META[id].name;
+  // language in status bar
+  const lang = id === 'skills' ? 'JSON' : 'TypeScript';
+  document.querySelector('.statusbar .sb-right .sb-item:nth-child(3)').textContent = lang;
+  renderTabs();
+}
+
+function closeTab(e, id) {
+  e.stopPropagation();
+  openTabs = openTabs.filter(x => x !== id);
+  if (current === id) {
+    if (openTabs.length > 0) openTab(openTabs[openTabs.length - 1]);
+    else {
+      current = null;
+      ALL_TABS.forEach(f => document.getElementById('pane-' + f).classList.remove('active'));
+      document.getElementById('sb-file').textContent = 'No file';
+    }
+  }
+  renderTabs();
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'P') { e.preventDefault(); openPalette(); return; }
+  if ((e.ctrlKey || e.metaKey) && !e.shiftKey) {
+    const n = parseInt(e.key);
+    if (n >= 1 && n <= 5) { e.preventDefault(); openTab(ALL_TABS[n-1]); }
+  }
+  if (e.key === 'Escape') closePalette();
+});
+
+/* ══════════════════════════════════════════════════════
+   THEME TOGGLE
+══════════════════════════════════════════════════════ */
+let dark = true;
+function toggleTheme() {
+  dark = !dark;
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = dark ? '☀️' : '🌙';
+  termLog(`<span class="t-ok">✓</span> <span class="t-out">Theme switched to ${dark ? 'Night Pink (dark)' : 'Day Pink (light)'}</span>`);
+  try { localStorage.setItem('afaf-theme', dark ? 'dark' : 'light'); } catch(e){}
+}
+// Restore saved theme
+try {
+  const saved = localStorage.getItem('afaf-theme');
+  if (saved === 'light') { dark = false; document.documentElement.setAttribute('data-theme','light'); document.getElementById('themeBtn').textContent = '🌙'; }
+} catch(e){}
+
+/* ══════════════════════════════════════════════════════
+   COMMAND PALETTE
+══════════════════════════════════════════════════════ */
+const CMD_ITEMS = [
+  { name:'about.ts',       desc:'Who is Afaf?',             action:()=>openTab('about'),      dot:'ts',   kbd:'Ctrl+1' },
+  { name:'projects.tsx',   desc:'Things I\'ve built',       action:()=>openTab('projects'),   dot:'tsx',  kbd:'Ctrl+2' },
+  { name:'experience.tsx', desc:'Internships & roles',      action:()=>openTab('experience'), dot:'tsx',  kbd:'Ctrl+3' },
+  { name:'skills.json',    desc:'Languages, tools & more',  action:()=>openTab('skills'),     dot:'json', kbd:'Ctrl+4' },
+  { name:'contact.ts',     desc:'Get in touch',             action:()=>openTab('contact'),    dot:'ts',   kbd:'Ctrl+5' },
+  { name:'Toggle theme',   desc:'Switch light / dark mode', action:toggleTheme,               dot:'',     kbd:'' },
+  { name:'GitHub',         desc:'github.com/afafmaliha0716',action:()=>window.open('https://github.com/afafmaliha0716','_blank'), dot:'', kbd:'' },
+];
+let cmdFocusIdx = 0;
+
+function openPalette() {
+  document.getElementById('cmdOverlay').classList.add('open');
+  document.getElementById('cmdInput').value = '';
+  filterCmd();
+  setTimeout(() => document.getElementById('cmdInput').focus(), 30);
+}
+function closePalette(e) {
+  if (!e || e.target === document.getElementById('cmdOverlay')) {
+    document.getElementById('cmdOverlay').classList.remove('open');
+  }
+}
+function filterCmd() {
+  const q = document.getElementById('cmdInput').value.toLowerCase();
+  const res = CMD_ITEMS.filter(c => c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q));
+  cmdFocusIdx = 0;
+  renderCmdItems(res);
+}
+function renderCmdItems(items) {
+  const el = document.getElementById('cmdResults');
+  el.innerHTML = items.map((c, i) => `
+    <div class="cmd-item${i===cmdFocusIdx?' focused':''}" onclick="runCmd(${CMD_ITEMS.indexOf(c)})">
+      <span class="cdot ${c.dot}" style="${c.dot?`background:var(--${c.dot==='ts'?'blue':c.dot==='tsx'?'purple':c.dot==='json'?'yellow':'accent'})`:''};width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0"></span>
+      <div class="c-left">
+        <div class="c-name">${c.name}</div>
+        <div class="c-desc">${c.desc}</div>
+      </div>
+      ${c.kbd ? `<span class="c-kbd">${c.kbd}</span>` : ''}
+    </div>`).join('');
+}
+function runCmd(idx) {
+  CMD_ITEMS[idx].action();
+  document.getElementById('cmdOverlay').classList.remove('open');
+}
+function cmdKey(e) {
+  const q = document.getElementById('cmdInput').value.toLowerCase();
+  const items = CMD_ITEMS.filter(c => c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q));
+  if (e.key === 'ArrowDown') { cmdFocusIdx = Math.min(cmdFocusIdx+1, items.length-1); renderCmdItems(items); }
+  if (e.key === 'ArrowUp')   { cmdFocusIdx = Math.max(cmdFocusIdx-1, 0); renderCmdItems(items); }
+  if (e.key === 'Enter' && items[cmdFocusIdx]) { runCmd(CMD_ITEMS.indexOf(items[cmdFocusIdx])); }
+}
+
+/* ══════════════════════════════════════════════════════
+   TERMINAL
+══════════════════════════════════════════════════════ */
+const RESPONSES = {
+  help:    () => `<span class="t-out">Available commands:</span>\n<span class="t-ok">  ls</span>       <span class="t-out">— list portfolio files</span>\n<span class="t-ok">  whoami</span>   <span class="t-out">— about Afaf</span>\n<span class="t-ok">  open &lt;file&gt;</span> <span class="t-out">— open a section</span>\n<span class="t-ok">  cat resume</span> <span class="t-out">— get the resume link</span>\n<span class="t-ok">  pwd</span>      <span class="t-out">— where am I?</span>\n<span class="t-ok">  clear</span>    <span class="t-out">— clear terminal</span>\n<span class="t-ok">  hook 'em</span> <span class="t-out">— 🤘</span>`,
+  ls:      () => `<span class="t-path">about.ts &nbsp; projects.tsx &nbsp; experience.tsx &nbsp; skills.json &nbsp; contact.ts</span>`,
+  whoami:  () => `<span class="t-ok">Afaf Maliha</span> <span class="t-out">— CS @ UT Austin, Year 3. SWE + PM. Building things that matter. ✦</span>`,
+  pwd:     () => `<span class="t-path">/home/afafmaliha0716/portfolio</span>`,
+  'cat resume': () => `<span class="t-out">Opening resume... </span><span class="t-ok">→ [Add your resume link to contact.ts]</span>`,
+  'hook em':  () => `<span class="t-ok">🤘 HOOK 'EM HORNS 🤘</span>`,
+  "hook 'em": () => `<span class="t-ok">🤘 HOOK 'EM HORNS 🤘</span>`,
+  date:    () => `<span class="t-out">${new Date().toDateString()}</span>`,
+  'open about':      () => { openTab('about');      return `<span class="t-ok">✓</span> <span class="t-out">Opened about.ts</span>`; },
+  'open projects':   () => { openTab('projects');   return `<span class="t-ok">✓</span> <span class="t-out">Opened projects.tsx</span>`; },
+  'open experience': () => { openTab('experience'); return `<span class="t-ok">✓</span> <span class="t-out">Opened experience.tsx</span>`; },
+  'open skills':     () => { openTab('skills');     return `<span class="t-ok">✓</span> <span class="t-out">Opened skills.json</span>`; },
+  'open contact':    () => { openTab('contact');    return `<span class="t-ok">✓</span> <span class="t-out">Opened contact.ts</span>`; },
+};
+
+function termLog(html) {
+  const log = document.getElementById('term-log');
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  log.appendChild(d);
+  document.getElementById('terminal-body').scrollTop = 99999;
+}
+
+function termKey(e) {
+  if (e.key !== 'Enter') return;
+  const inp = document.getElementById('termInput');
+  const cmd = inp.value.trim().toLowerCase();
+  inp.value = '';
+  if (!cmd) return;
+  termLog(`<span class="t-pmt">afaf@portfolio:~$</span> <span class="t-cmd">${cmd}</span>`);
+  if (cmd === 'clear') { clearTerminal(); return; }
+  const fn = RESPONSES[cmd];
+  if (fn) {
+    const out = fn();
+    if (out) termLog(out);
+  } else {
+    termLog(`<span class="t-err">bash: ${cmd}: command not found</span> <span class="t-out">(try: help)</span>`);
+  }
+}
+
+function clearTerminal() {
+  document.getElementById('term-log').innerHTML = '';
+}
+
+/* ══════════════════════════════════════════════════════
+   PANEL TABS
+══════════════════════════════════════════════════════ */
+function switchPanel(tab) {
+  document.getElementById('terminal-body').classList.toggle('active', tab === 'terminal');
+  document.getElementById('problems-body').style.display  = tab === 'problems' ? 'block' : 'none';
+  document.getElementById('output-body').style.display    = tab === 'output'   ? 'block' : 'none';
+  ['terminal','problems','output'].forEach(t => {
+    document.getElementById('ptab-' + t).classList.toggle('active', t === tab);
+  });
+}
+
+let panelCollapsed = false;
+function togglePanel() {
+  panelCollapsed = !panelCollapsed;
+  document.getElementById('panel').style.height = panelCollapsed ? '30px' : '';
+}
+
+/* ══════════════════════════════════════════════════════
+   STATUS BAR ROTATING MESSAGE
+══════════════════════════════════════════════════════ */
+const STATUSES = [
+  '● building something cool...',
+  '● 3rd yr CS @ UT Austin',
+  '● open to Summer 2026 internships',
+  '● SWE + PM 🤘',
+  '● currently: [your project]',
+];
+let sIdx = 0;
+setInterval(() => {
+  sIdx = (sIdx + 1) % STATUSES.length;
+  document.getElementById('sb-status').textContent = STATUSES[sIdx];
+}, 3500);
+
+/* ══════════════════════════════════════════════════════
+   TOOLTIP (hover on [data-tt] elements)
+══════════════════════════════════════════════════════ */
+document.querySelectorAll('[data-tt]').forEach(el => {
+  el.style.cursor = 'help';
+  el.style.textDecoration = 'underline dotted';
+  el.addEventListener('mouseenter', e => {
+    const tt = document.getElementById('tooltip');
+    document.getElementById('tt-type').textContent = el.dataset.tt || '';
+    document.getElementById('tt-desc').textContent = el.dataset.ttd || '';
+    tt.style.display = 'block';
+    const r = el.getBoundingClientRect();
+    tt.style.left = r.left + 'px';
+    tt.style.top  = (r.bottom + 6) + 'px';
+  });
+  el.addEventListener('mouseleave', () => {
+    document.getElementById('tooltip').style.display = 'none';
+  });
+});
+
+/* ══════════════════════════════════════════════════════
+   BOOT TERMINAL
+══════════════════════════════════════════════════════ */
+const boot = [
+  { delay: 200,  html: `<span class="t-out">$ npm run dev</span>` },
+  { delay: 600,  html: `<span class="t-out">  ▸ Starting portfolio server...</span>` },
+  { delay: 1100, html: `<span class="t-ok">  ✓ Ready on http://localhost:3000</span>` },
+  { delay: 1700, html: `<span class="t-out">$ git log --oneline -3</span>` },
+  { delay: 2000, html: `<span style="color:var(--yellow)">a1b2c3f</span> <span class="t-out">feat: dark Night Pink theme + command palette</span>` },
+  { delay: 2200, html: `<span style="color:var(--yellow)">d4e5f6a</span> <span class="t-out">feat: interactive terminal with easter eggs</span>` },
+  { delay: 2400, html: `<span style="color:var(--yellow)">c7d8e9b</span> <span class="t-out">init: vscode portfolio — afafmaliha0716 ✦</span>` },
+];
+boot.forEach(({delay, html}) => setTimeout(() => termLog(html), delay));
+
+/* ══════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════ */
+renderTabs();
+</script>
+</body>
+</html>
